@@ -1,0 +1,27 @@
+$primary: #007DF0;
+$secondary: #424242;
+$error: #FF5252;
+$accent: #82B1FF;
+
+@mixin page-container-style {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: center;
+  background-image: url("../assets/img/fundo-tela.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    z-index: 0;
+  }
+}
