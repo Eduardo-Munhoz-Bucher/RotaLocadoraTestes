@@ -10,7 +10,7 @@
       color="#DFDFDF"
       to="/veiculos"
     >
-      VEÍCULOS
+      Veículos
     </v-btn>
     <v-btn
       :class="{
@@ -21,7 +21,7 @@
       color="#DFDFDF"
       to="/historico"
     >
-      HISTÓRICO DE ATIVIDADES
+      Histórico de atividades
     </v-btn>
 
     <v-spacer></v-spacer>
