@@ -21,7 +21,7 @@
           <v-col cols="12" class="alinhamento-filtros">
             <v-btn icon large @click="visibilidadeFiltro" class="btn-toClose">
               <img
-                src="../assets/img/bars-filter.png"
+                src="../../assets/img/bars-filter.png"
                 alt="icone-bars"
                 width="26"
                 height="24"
@@ -41,7 +41,7 @@
                       @click="filtrarVeiculos"
                     >
                       <img
-                        src="../assets/img/magnifying-glass.png"
+                        src="../../assets/img/magnifying-glass.png"
                         alt="icone-lupa"
                       />
                     </v-btn>
@@ -54,7 +54,7 @@
                       height="40"
                       @click="limparFiltro"
                     >
-                      <img src="../assets/img/erase.png" alt="icone-limpar" />
+                      <img src="../../assets/img/erase.png" alt="icone-limpar" />
                     </v-btn>
                   </div>
                 </v-col>
@@ -188,7 +188,7 @@
                 <td class="conforto">
                   {{ veiculo.conforto }}
                   <img
-                    src="../assets/img/star-solid.png"
+                    src="../../assets/img/star-solid.png"
                     alt="star-solid"
                     width="20"
                     height="19"
@@ -229,9 +229,9 @@
 </template>
 
 <script>
-import dropdownVeiculos from "../components/dropdownVeiculos.vue";
-import theHeader from "../components/theHeader.vue";
-import modalCadastro from "../components/modal/modalCadastro.vue";
+import dropdownVeiculos from "../../components/dropdownVeiculos.vue";
+import theHeader from "../../components/theHeader.vue";
+import modalCadastro from "../../components/modal/modalCadastro.vue";
 
 export default {
   middleware: "auth",

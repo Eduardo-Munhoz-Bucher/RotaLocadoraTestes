@@ -75,7 +75,7 @@ export default {
   computed: {
     userName() {
       return this.$store.getters["auth/userName"];
-    }
+    },
   },
 
   methods: {
@@ -97,17 +97,17 @@ export default {
   margin-left: 10px;
   font-size: 12px;
   font-family: "Roboto";
-  font-weight: 700; 
+  font-weight: 700;
 }
 
 .active-btn {
   background-color: rgba(0, 125, 240, 0.1);
-  color: $primary; 
+  color: $primary;
 }
 
 .cor-btn {
-  background-color: #DFDFDF;
-  color: #000; 
+  background-color: #dfdfdf;
+  color: #000;
 }
 
 .dados {
@@ -129,14 +129,14 @@ export default {
   display: flex;
   justify-content: start;
   align-items: center;
-}
 
-.div-sair:hover {
-  background-color: #DFDFDF;
+  &:hover {
+    background-color: #dfdfdf;
+  }
 }
 
 .theme--dark.v-card {
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .v-list-item__content {
@@ -150,7 +150,7 @@ export default {
 }
 
 .btn-sair {
-  color: #E8363B;
+  color: #e8363b;
   margin: 0;
   font-size: 14px;
   font-weight: 400;

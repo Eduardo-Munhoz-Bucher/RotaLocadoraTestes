@@ -96,7 +96,7 @@ export default {
       } catch (error) {
         this.$toast.error(
           error.response?.data?.message || "Erro ao fazer login!"
-        );        
+        );
       }
 
       this.loading = false;
@@ -182,10 +182,10 @@ export default {
   text-decoration: none;
   color: #a9a7a9;
   transition: 0.3s;
-}
 
-.novaConta > a:hover {
-  text-decoration: none;
-  color: #797979;
+  &:hover {
+    text-decoration: none;
+    color: #797979;
+  }
 }
 </style>

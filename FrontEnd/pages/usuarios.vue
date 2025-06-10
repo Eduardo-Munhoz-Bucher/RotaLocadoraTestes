@@ -182,14 +182,14 @@ export default {
         !this.formData.senha ||
         !this.formData.confirmaSenha
       ) {
-        this.$toast.error('Campos não preenchidos!')
+        this.$toast.error("Campos não preenchidos!");
         this.validate();
         this.loading = false;
         return;
       }
 
       if (this.formData.senha !== this.formData.confirmaSenha) {
-        this.$toast.error('Senhas divergentes.')
+        this.$toast.error("Senhas divergentes.");
         this.loading = false;
         return;
       }
@@ -205,7 +205,7 @@ export default {
         const response = await this.$usuarioService.postUsuario(data);
 
         if (response.status === 201 || response.status === 200) {
-          this.$toast.success('Usuário cadastrado com sucesso!')
+          this.$toast.success("Usuário cadastrado com sucesso!");
 
           await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -215,8 +215,8 @@ export default {
         }
       } catch (error) {
         console.error("Erro ao criar usuário:", error);
-        
-        this.$toast.error('Erro ao criar usuário!')
+
+        this.$toast.error("Erro ao criar usuário!");
       } finally {
         this.loading = false;
       }
@@ -346,10 +346,10 @@ export default {
   text-decoration: none;
   color: #a9a7a9;
   transition: 0.3s;
-}
 
-.novoLogin > a:hover {
-  text-decoration: none;
-  color: #797979;
+  &:hover {
+    text-decoration: none;
+    color: #797979;
+  }
 }
 </style>
