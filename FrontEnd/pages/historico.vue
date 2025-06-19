@@ -4,65 +4,12 @@
       <TheHeader />
 
       <v-container fluid data-app class="container-filtros">
-        <v-row>
-          <v-col cols="12" class="alinhamento-filtros">
-            <v-btn icon large @click="visibilidadeFiltro" class="btn-toClose">
-              <img
-                src="../assets/img/bars-filter.png"
-                alt="icone-bars"
-                width="26"
-                height="24"
-              />
-            </v-btn>
-            <v-slide-x-reverse-transition>
-              <div v-show="visibilidade" class="visibilidade">
-                <v-col cols="1" class="buttons">
-                  <div>
-                    <v-btn
-                      color="secondary"
-                      elevation="1"
-                      outlined
-                      class="btn-left"
-                      width="60"
-                      height="40"
-                      @click="filtrarVeiculos"
-                    >
-                      <img
-                        src="../assets/img/magnifying-glass.png"
-                        alt="icone-lupa"
-                      />
-                    </v-btn>
-                    <v-btn
-                      color="secondary"
-                      elevation="1"
-                      outlined
-                      class="btn-right"
-                      width="60"
-                      height="40"
-                      @click="limparFiltro"
-                    >
-                      <img src="../assets/img/erase.png" alt="icone-limpar" />
-                    </v-btn>
-                  </div>
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    type="text"
-                    v-model="filtroPlaca"
-                    label="Placa"
-                    placeholder="Digite a placa do veículo"
-                    persistent-placeholder
-                    outlined
-                    dense
-                    hide-details
-                  >
-                  </v-text-field>
-                </v-col>
-                <v-spacer></v-spacer>
-              </div>
-            </v-slide-x-reverse-transition>
-          </v-col>
-        </v-row>
+        <filterVeiculos
+          :mostrarPropUso="false"
+          :mostrarMarcas="false"
+          @aplicar-filtros="aplicarFiltros"
+          @limpar-filtros="limparFiltros"
+        />
       </v-container>
 
       <v-card class="tabela-historico">
@@ -117,7 +64,7 @@
             </tbody>
           </template>
         </v-simple-table>
-        <div v-if="historico == !historico" class="semHistorico">
+        <div v-if="historico.length === 0" class="semHistorico">
           <p class="mb-0">Nenhum histórico encontrado</p>
         </div>
       </v-card>
@@ -137,11 +84,13 @@
 
 <script>
 import theHeader from "../components/theHeader.vue";
+import filterVeiculos from "~/components/filterVeiculos.vue";
 
 export default {
   middleware: "auth",
   components: {
     theHeader,
+    filterVeiculos,
   },
   name: "historico",
   data() {
@@ -150,7 +99,6 @@ export default {
       historicoPorPag: 10,
       historico: [],
       filtroPlaca: "",
-      visibilidade: true,
     };
   },
 
@@ -206,17 +154,25 @@ export default {
     async filtrarVeiculos() {
       try {
         const params = {};
-
         if (this.filtroPlaca.trim()) {
           params.placa = this.filtroPlaca.trim();
         }
-
         const response = await this.$axios.get("historico", { params });
-
         this.historico = response.data;
+        this.pagAtual = 1; // Reseta para a primeira página
       } catch (error) {
         console.error("Erro ao filtrar histórico: ", error);
       }
+    },
+
+    aplicarFiltros(filtros) {
+      this.filtroPlaca = filtros.placa || "";
+      this.filtrarVeiculos();
+    },
+
+    limparFiltros() {
+      this.filtroPlaca = "";
+      this.getHistorico();
     },
   },
 
