@@ -17,133 +17,12 @@
           @veiculoCadastrado="atualizarVeiculos"
         />
 
-        <v-row>
-          <v-col cols="12" class="alinhamento-filtros">
-            <v-btn icon large @click="visibilidadeFiltro" class="btn-toClose">
-              <img
-                src="../../assets/img/bars-filter.png"
-                alt="icone-bars"
-                width="26"
-                height="24"
-              />
-            </v-btn>
-            <v-slide-x-reverse-transition>
-              <div v-if="visibilidade" class="visibilidade">
-                <v-col cols="1" class="buttons">
-                  <div>
-                    <v-btn
-                      color="secondary"
-                      elevation="1"
-                      outlined
-                      class="btn-left"
-                      width="60"
-                      height="40"
-                      @click="filtrarVeiculos"
-                    >
-                      <img
-                        src="../../assets/img/magnifying-glass.png"
-                        alt="icone-lupa"
-                      />
-                    </v-btn>
-                    <v-btn
-                      color="secondary"
-                      elevation="1"
-                      outlined
-                      class="btn-right"
-                      width="60"
-                      height="40"
-                      @click="limparFiltro"
-                    >
-                      <img src="../../assets/img/erase.png" alt="icone-limpar" />
-                    </v-btn>
-                  </div>
-                </v-col>
-                <v-col cols="3">
-                  <v-text-field
-                    type="text"
-                    v-model="filtroPlaca"
-                    label="Placa"
-                    placeholder="Digite a placa do veículo"
-                    persistent-placeholder
-                    outlined
-                    dense
-                    hide-details
-                  >
-                  </v-text-field>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-select
-                    :items="propUso"
-                    label="Propósito de uso"
-                    placeholder="Selecione o propósito de uso"
-                    persistent-placeholder
-                    v-model="filtroProp"
-                    outlined
-                    dense
-                    hide-details
-                    :menu-props="{ offsetY: true }"
-                    append-icon="mdi-chevron-down"
-                  >
-                    <template v-slot:prepend-item>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title class="grey--text header-select">
-                            Propósito de uso
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                    </template>
-                  </v-select>
-                </v-col>
-
-                <v-col cols="3">
-                  <v-select
-                    :items="marcas"
-                    label="Marca"
-                    placeholder="Selecione a marca do veículo"
-                    persistent-placeholder
-                    v-model="filtroMarcas"
-                    multiple
-                    outlined
-                    dense
-                    hide-details
-                    :menu-props="{ offsetY: true }"
-                    append-icon="mdi-chevron-down"
-                  >
-                    <template v-slot:selection="{ item, index, parent }">
-                      <v-chip v-if="index === 0">
-                        <span>{{ item }}</span>
-                        <v-icon
-                          class="icone-deletar"
-                          small
-                          @click="parent.selectItem(item)"
-                        >
-                          $delete
-                        </v-icon>
-                      </v-chip>
-                      <span v-if="index === 1" class="span-contador">
-                        (+{{ filtroMarcas.length - 1 }})
-                      </span>
-                    </template>
-                    <template v-slot:prepend-item>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title class="grey--text header-select">
-                            Marca
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                    </template>
-                  </v-select>
-                </v-col>
-                <v-spacer></v-spacer>
-              </div>
-            </v-slide-x-reverse-transition>
-          </v-col>
-        </v-row>
+        <filterVeiculos
+          :mostrarPropUso="true"
+          :mostrarMarcas="true"
+          @aplicar-filtros="aplicarFiltros"
+          @limpar-filtros="limparFiltros"
+        />
       </v-container>
 
       <v-card v-if="loading" class="tabela-veiculos">
@@ -232,6 +111,7 @@
 import dropdownVeiculos from "../../components/dropdownVeiculos.vue";
 import theHeader from "../../components/theHeader.vue";
 import modalCadastro from "../../components/modal/modalCadastro.vue";
+import filterVeiculos from "~/components/filterVeiculos.vue";
 
 export default {
   middleware: "auth",
@@ -239,6 +119,7 @@ export default {
     theHeader,
     dropdownVeiculos,
     modalCadastro,
+    filterVeiculos,
   },
   name: "veiculos",
   data() {
@@ -249,22 +130,6 @@ export default {
       loading: true,
       dialog: false,
       veiculos: [],
-      marcas: [
-        "Bmw",
-        "Chevrolet",
-        "Volkswagen",
-        "Fiat",
-        "Nissan",
-        "Ford",
-        "Jeep",
-        "Audi",
-        "Toyota",
-      ],
-      propUso: ["Uso pessoal", "Veículo para locação", "Uso da empresa"],
-      filtroMarcas: [],
-      filtroProp: "",
-      filtroPlaca: "",
-      visibilidade: true,
       headers: [
         { text: "Placa", value: "placa" },
         { text: "Marca/Modelo", value: "marca_modelo" },
@@ -276,6 +141,9 @@ export default {
         { text: "Local de repouso (lat,long)", value: "localizacao" },
         { text: "" },
       ],
+      filtroPlaca: "",
+      filtroProp: "",
+      filtroMarcas: [],
     };
   },
 
@@ -290,15 +158,6 @@ export default {
   },
 
   methods: {
-    limparFiltro() {
-      (this.filtroMarcas = []), (this.filtroProp = ""), (this.filtroPlaca = "");
-      this.getVeiculos();
-    },
-
-    visibilidadeFiltro() {
-      this.visibilidade = !this.visibilidade;
-    },
-
     ajustarItensPorPagina() {
       const altura = window.innerHeight;
       if (altura >= 900) {
@@ -328,8 +187,24 @@ export default {
       await this.getVeiculos();
     },
 
+    limparFiltros() {
+      this.filtroPlaca = "";
+      this.filtroProp = "";
+      this.filtroMarcas = [];
+      this.atualizarVeiculos();
+    },
+
+    aplicarFiltros(filtros) {
+      // Atualiza os filtros com os valores recebidos do componente
+      this.filtroPlaca = filtros.placa || "";
+      this.filtroProp = filtros.proposito || "";
+      this.filtroMarcas = filtros.marcas || [];
+      this.filtrarVeiculos(); // Chama a função de filtragem
+    },
+
     async filtrarVeiculos() {
       try {
+        this.loading = true;
         const params = {};
 
         if (this.filtroMarcas.length)
@@ -340,8 +215,11 @@ export default {
         const response = await this.$axios.get("veiculos", { params });
 
         this.veiculos = response.data;
+        this.pagAtual = 1;
       } catch (error) {
         console.error("Erro ao filtrar veículo(s): ", error);
+      } finally {
+        this.loading = false;
       }
     },
   },
@@ -372,46 +250,6 @@ export default {
   margin-bottom: 5px;
 }
 
-.alinhamento-filtros {
-  display: flex;
-  flex-direction: row-reverse;
-  padding: 0 12px;
-}
-
-.visibilidade {
-  display: flex;
-  flex-direction: row-reverse;
-  width: 100%;
-  margin-right: 60px;
-  transition: 0.5ms;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 18px;
-}
-
-.buttons div {
-  width: 150px;
-}
-
-.btn-left {
-  border-radius: 5px 0 0 5px;
-  border: 1px solid #dfdfdf;
-}
-
-.btn-right {
-  border-radius: 0 5px 5px 0;
-  border: 1px solid #dfdfdf;
-  transform: translateX(-5px);
-}
-
-.btn-toClose {
-  margin: 30px 15px 10px 0;
-}
-
 .btn-cadastro-veiculo {
   padding: 10px !important;
   text-transform: none;
@@ -420,75 +258,6 @@ export default {
   font-weight: 700;
   color: #fff;
   margin-left: 15px;
-}
-
-::v-deep .v-input__slot {
-  margin-top: 20px;
-  padding: 0;
-}
-
-::v-deep .v-select__sloot {
-  height: 40px !important;
-}
-
-.v-chip {
-  height: 20px;
-  font-size: 12px;
-  font-family: "Roboto";
-  font-weight: 400;
-}
-
-::v-deep .v-text-field input {
-  font-family: "Roboto";
-  font-size: 12px !important;
-  font-weight: 400;
-}
-
-::v-deep .v-select__selection {
-  font-size: 14px;
-  font-family: "Roboto";
-  font-weight: 400;
-}
-
-::v-deep .v-select__selections > .span-contador {
-  font-size: 14px;
-  font-family: "Roboto";
-  font-weight: 400;
-  color: #a9a7a9 !important;
-}
-
-.v-list {
-  padding: 0 !important;
-}
-
-::v-deep .v-list-item__action {
-  margin: 0 !important;
-}
-
-::v-deep .theme--dark.v-icon {
-  color: #a9a7a9;
-}
-
-::v-deep .v-list .v-list-item--active .v-icon {
-  color: #3366cc !important;
-}
-
-::v-deep .v-list-item__title {
-  color: #333333;
-  padding-left: 4px;
-  font-family: "Roboto";
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.header-select {
-  color: #a9a7a9 !important;
-  font-size: 12px !important;
-  font-weight: 400 !important;
-}
-
-.icone-deletar {
-  padding-left: 5px;
 }
 
 .tabela-veiculos {
@@ -541,6 +310,10 @@ td {
 
 .star {
   margin: 0 0 3px 5px;
+}
+
+::v-deep .v-list-item__action {
+  margin: 0 !important;
 }
 
 .icone-dropdown {
