@@ -196,9 +196,9 @@ export default {
 
     aplicarFiltros(filtros) {
       // Atualiza os filtros com os valores recebidos do componente
-      this.filtroPlaca = filtros.placa || "";
-      this.filtroProp = filtros.proposito || "";
       this.filtroMarcas = filtros.marcas || [];
+      this.filtroProp = filtros.proposito || "";
+      this.filtroPlaca = filtros.placa || "";
       this.filtrarVeiculos(); // Chama a função de filtragem
     },
 
@@ -207,8 +207,7 @@ export default {
         this.loading = true;
         const params = {};
 
-        if (this.filtroMarcas.length)
-          params.marca = this.filtroMarcas.join(",");
+        if (this.filtroMarcas.length) params.marca = this.filtroMarcas.join(",");
         if (this.filtroProp.trim()) params.proposito = this.filtroProp.trim();
         if (this.filtroPlaca.trim()) params.placa = this.filtroPlaca.trim();
 
@@ -217,6 +216,7 @@ export default {
         this.veiculos = response.data;
         this.pagAtual = 1;
       } catch (error) {
+        this.$toast.error("Erro ao filtrar veículos");
         console.error("Erro ao filtrar veículo(s): ", error);
       } finally {
         this.loading = false;

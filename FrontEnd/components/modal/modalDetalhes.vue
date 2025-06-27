@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog max-width="850" v-model="dialog" persistent>
+    <v-dialog max-width="850" v-model="dialogDetalhesVeiculo" persistent>
       <v-card light>
         <div class="d-flex justify-space-between">
           <v-toolbar color="primary" class="white--color">
@@ -109,7 +109,7 @@ export default {
   props: ["veiculo"],
   data() {
     return {
-      dialog: true,
+      dialogDetalhesVeiculo: true,
       marcas: ["BMW", "Chevrolet", "VolksWagen", "Fiat", "Nissan", "Toyota"],
       proUso: ["Uso pessoal", "Veículo para locação", "Uso da empresa"],
       placa: null,

@@ -81,12 +81,7 @@ export default {
 
     handleFechaModalDeletar() {
       this.detalhes[2].modal = false;
-      this.atualizarVeiculos();
-      // Remove o parâmetro de query da URL ao fechar a modal
-      this.$router.push({
-        path: this.$route.path,
-        query: {}, // Remove todos os parâmetros de query
-      });
+      this.atualizarVeiculos(); 
     },
   },
 };

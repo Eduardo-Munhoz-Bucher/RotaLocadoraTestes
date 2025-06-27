@@ -161,6 +161,7 @@ export default {
         this.historico = response.data;
         this.pagAtual = 1; // Reseta para a primeira página
       } catch (error) {
+        this.$toast.error("Erro ao filtrar veículos");
         console.error("Erro ao filtrar histórico: ", error);
       }
     },

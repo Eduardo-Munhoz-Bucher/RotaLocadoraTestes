@@ -1,131 +1,131 @@
 <template>
   <v-row>
-          <v-col cols="12" class="alinhamento-filtros">
-            <v-btn icon large @click="visibilidadeFiltro" class="btn-toClose">
-              <img
-                src="../assets/img/bars-filter.png"
-                alt="icone-bars"
-                width="26"
-                height="24"
-              />
-            </v-btn>
-            <v-slide-x-reverse-transition>
-              <div v-if="visibilidade" class="visibilidade">
-                <v-col cols="1" class="buttons">
-                  <div>
-                    <v-btn
-                      color="secondary"
-                      elevation="1"
-                      outlined
-                      class="btn-left"
-                      width="60"
-                      height="40"
-                      @click="filtrarVeiculos"
-                    >
-                      <img
-                        src="../assets/img/magnifying-glass.png"
-                        alt="icone-lupa"
-                      />
-                    </v-btn>
-                    <v-btn
-                      color="secondary"
-                      elevation="1"
-                      outlined
-                      class="btn-right"
-                      width="60"
-                      height="40"
-                      @click="limparFiltro"
-                    >
-                      <img src="../assets/img/erase.png" alt="icone-limpar" />
-                    </v-btn>
-                  </div>
-                </v-col>
-                <v-col cols="3">
-                  <v-text-field
-                    type="text"
-                    v-model="filtroPlaca"
-                    label="Placa"
-                    placeholder="Digite a placa do veículo"
-                    persistent-placeholder
-                    outlined
-                    dense
-                    hide-details
-                  >
-                  </v-text-field>
-                </v-col>
-
-                <v-col v-if="mostrarPropUso" cols="3">
-                  <v-select
-                    :items="propUso"
-                    label="Propósito de uso"
-                    placeholder="Selecione o propósito de uso"
-                    persistent-placeholder
-                    v-model="filtroProp"
-                    outlined
-                    dense
-                    hide-details
-                    :menu-props="{ offsetY: true }"
-                    append-icon="mdi-chevron-down"
-                  >
-                    <template v-slot:prepend-item>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title class="grey--text header-select">
-                            Propósito de uso
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                    </template>
-                  </v-select>
-                </v-col>
-
-                <v-col v-if="mostrarMarcas" cols="3">
-                  <v-autocomplete
-                    :items="marcas"
-                    label="Marca"
-                    placeholder="Selecione a marca do veículo"
-                    persistent-placeholder
-                    v-model="filtroMarcas"
-                    multiple
-                    outlined
-                    dense
-                    hide-details
-                    :menu-props="{ offsetY: true }"
-                    append-icon="mdi-chevron-down"
-                  >
-                    <template v-slot:selection="{ item, index, parent }">
-                      <v-chip v-if="index === 0">
-                        <span>{{ item }}</span>
-                        <v-icon
-                          class="icone-deletar"
-                          small
-                          @click="parent.selectItem(item)"
-                        >
-                          $delete
-                        </v-icon>
-                      </v-chip>
-                      <span v-if="index === 1" class="span-contador">
-                        (+{{ filtroMarcas.length - 1 }})
-                      </span>
-                    </template>
-                    <template v-slot:prepend-item>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title class="grey--text header-select">
-                            Marca
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                    </template>
-                  </v-autocomplete>
-                </v-col>
-                <v-spacer></v-spacer>
-              </div>
-            </v-slide-x-reverse-transition>
+    <v-col cols="12" class="alinhamento-filtros">
+      <v-btn icon large @click="visibilidadeFiltro" class="btn-toClose">
+        <img
+          src="../assets/img/bars-filter.png"
+          alt="icone-bars"
+          width="26"
+          height="24"
+        />
+      </v-btn>
+      <v-slide-x-reverse-transition>
+        <div v-if="visibilidade" class="visibilidade">
+          <v-col cols="1" class="buttons">
+            <div>
+              <v-btn
+                color="secondary"
+                elevation="1"
+                outlined
+                class="btn-left"
+                width="60"
+                height="40"
+                @click="filtrarVeiculos"
+              >
+                <img
+                  src="../assets/img/magnifying-glass.png"
+                  alt="icone-lupa"
+                />
+              </v-btn>
+              <v-btn
+                color="secondary"
+                elevation="1"
+                outlined
+                class="btn-right"
+                width="60"
+                height="40"
+                @click="limparFiltro"
+              >
+                <img src="../assets/img/erase.png" alt="icone-limpar" />
+              </v-btn>
+            </div>
           </v-col>
-        </v-row>
+          <v-col cols="3">
+            <v-text-field
+              type="text"
+              v-model="filtroPlaca"
+              label="Placa"
+              placeholder="Digite a placa do veículo"
+              persistent-placeholder
+              outlined
+              dense
+              hide-details
+            >
+            </v-text-field>
+          </v-col>
+
+          <v-col v-if="mostrarPropUso" cols="3">
+            <v-select
+              :items="propUso"
+              label="Propósito de uso"
+              placeholder="Selecione o propósito de uso"
+              persistent-placeholder
+              v-model="filtroProp"
+              outlined
+              dense
+              hide-details
+              :menu-props="{ offsetY: true }"
+              append-icon="mdi-chevron-down"
+            >
+              <template v-slot:prepend-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title class="grey--text header-select">
+                      Propósito de uso
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider></v-divider>
+              </template>
+            </v-select>
+          </v-col>
+
+          <v-col v-if="mostrarMarcas" cols="3">
+            <v-autocomplete
+              :items="marcas"
+              label="Marca"
+              placeholder="Selecione a marca do veículo"
+              persistent-placeholder
+              v-model="filtroMarcas"
+              multiple
+              outlined
+              dense
+              hide-details
+              :menu-props="{ offsetY: true }"
+              append-icon="mdi-chevron-down"
+            >
+              <template v-slot:selection="{ item, index, parent }">
+                <v-chip v-if="index === 0">
+                  <span>{{ item }}</span>
+                  <v-icon
+                    class="icone-deletar"
+                    small
+                    @click="parent.selectItem(item)"
+                  >
+                    $delete
+                  </v-icon>
+                </v-chip>
+                <span v-if="index === 1" class="span-contador">
+                  (+{{ filtroMarcas.length - 1 }})
+                </span>
+              </template>
+              <template v-slot:prepend-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <v-list-item-title class="grey--text header-select">
+                      Marca
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider></v-divider>
+              </template>
+            </v-autocomplete>
+          </v-col>
+          <v-spacer></v-spacer>
+        </div>
+      </v-slide-x-reverse-transition>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -159,17 +159,17 @@ export default {
       filtroProp: "",
       filtroPlaca: "",
       visibilidade: true,
-    }
+    };
   },
 
   methods: {
+    visibilidadeFiltro() {
+      this.visibilidade = !this.visibilidade;
+    },
+
     limparFiltro() {
       (this.filtroMarcas = []), (this.filtroProp = ""), (this.filtroPlaca = "");
       this.$emit("limpar-filtros");
-    },
-
-    visibilidadeFiltro() {
-      this.visibilidade = !this.visibilidade;
     },
 
     filtrarVeiculos() {
@@ -178,16 +178,14 @@ export default {
       };
 
       // Apenas inclui os filtros de propósito e marcas se eles estiverem habilitados
-      if (this.mostrarPropUso) {
-        filtros.proposito = this.filtroProp;
-      }
-      if (this.mostrarMarcas) {
-        filtros.marcas = this.filtroMarcas;
-      }
+      if (this.mostrarPropUso) filtros.proposito = this.filtroProp;
+
+      if (this.mostrarMarcas) filtros.marcas = this.filtroMarcas;
+
       this.$emit("aplicar-filtros", filtros);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -206,8 +204,20 @@ export default {
   display: flex;
   flex-direction: row-reverse;
   width: 100%;
-  margin-right: 60px;
+  margin-right: 38px;
   transition: 0.5ms;
+}
+
+@media screen and (max-width: 1500px) {
+  .visibilidade {
+    margin-right: 60px;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .visibilidade {
+    margin-right: 80px;
+  }
 }
 
 .buttons {
