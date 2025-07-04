@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import modalEditar from "./modal/modalEditar.vue";
-import modalDetalhes from "./modal/modalDetalhes.vue";
-import modalDeletar from "./modal/modalDeletar.vue";
+import modalEditar from "./modalVeiculo/modalEditar.vue";
+import modalDetalhes from "./modalVeiculo/modalDetalhes.vue";
+import modalDeletar from "./modalVeiculo/modalDeletar.vue";
 
 export default {
   props: ["veiculo", "id", "atualizarVeiculos"],

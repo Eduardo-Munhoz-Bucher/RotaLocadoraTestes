@@ -9,7 +9,7 @@
               <span>{{ veiculo.placa }}</span>
             </div>
             <v-btn text icon @click="$emit('fechaModal')">
-              <img src="../../assets/img/xmark.png" alt="clone" />
+              <img src="../../assets/img/xmark.png" alt="close" />
             </v-btn>
           </v-toolbar>
         </div>
