@@ -44,7 +44,7 @@
             >Entrar</v-btn
           >
           <div class="novaConta">
-            <NuxtLink to="/usuarios">Criar conta</NuxtLink>
+            <NuxtLink to="/novoUsuario">Criar conta</NuxtLink>
           </div>
         </v-container>
       </v-form>

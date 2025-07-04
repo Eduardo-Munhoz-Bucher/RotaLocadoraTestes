@@ -3,6 +3,11 @@ export class UsuarioService {
     this.httpClient = httpClient;
   }
 
+  async getUsuarios() {
+    const response = await this.httpClient.get("/usuarios");
+    return response.data;
+  }
+
   async postUsuario(data) {
     const response = await this.httpClient.post("/usuarios", data);
     return response;

@@ -44,20 +44,28 @@
             </v-avatar>
           </v-btn>
         </template>
-        <v-card>
-          <v-list-item-content>
-            <div class="mx-auto div-sair">
-              <v-btn depressed text block class="btn-sair" @click="sair">
-                <img
-                  src="../assets/img/arrow-right-from-bracket.png"
-                  alt="sair"
-                  class="img-sair"
-                />
-                Sair
-              </v-btn>
-            </div>
-          </v-list-item-content>
-        </v-card>
+        <v-list>
+          <v-list-item class="div-usuarios" link to="/usuarios">
+            <v-list-item-title
+              depressed
+              text
+              block
+              class="item-usuarios"
+              to="/usuarios"
+              link
+              >Usuários</v-list-item-title
+            >
+          </v-list-item>
+          <v-list-item class="mx-auto div-sair" link @click="sair">
+            <v-list-item-title depressed text block class="item-sair"
+              ><img
+                src="../assets/img/arrow-right-from-bracket.png"
+                alt="sair"
+                class="img-sair"
+              />Sair</v-list-item-title
+            >
+          </v-list-item>
+        </v-list>
       </v-menu>
     </div>
   </v-app-bar>
@@ -125,6 +133,31 @@ export default {
   font-weight: 700;
 }
 
+.div-usuarios {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
+  &:hover {
+    background-color: #dfdfdf;
+  }
+}
+
+.v-list .v-list-item--active {
+  color: #FFF;
+}
+
+.item-usuarios {
+  color: #000000;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 1.2px;
+  display: flex;
+  justify-content: start;
+}
+
 .div-sair {
   display: flex;
   justify-content: start;
@@ -139,24 +172,20 @@ export default {
   background-color: #fff;
 }
 
-.v-list-item__content {
-  padding: 8px 0;
-}
-
 .img-sair {
   width: 13px;
   height: 15px;
   margin-right: 8px;
 }
 
-.btn-sair {
+.item-sair {
   color: #e8363b;
   margin: 0;
   font-size: 14px;
   font-weight: 400;
   text-transform: none;
+  letter-spacing: 1.2px;
   display: flex;
   justify-content: start;
-  padding: 0 12px !important;
 }
 </style>

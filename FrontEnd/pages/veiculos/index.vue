@@ -11,7 +11,7 @@
         >
           Cadastrar Veículo
         </v-btn>
-        <ModalCadastro
+        <ModalCadastroVeiculo
           v-if="modal"
           @fechaModal="modal = false"
           @veiculoCadastrado="atualizarVeiculos"
@@ -110,7 +110,7 @@
 <script>
 import dropdownVeiculos from "../../components/dropdownVeiculos.vue";
 import theHeader from "../../components/theHeader.vue";
-import modalCadastro from "../../components/modal/modalCadastro.vue";
+import modalCadastroVeiculo from "../../components/modalVeiculo/modalCadastroVeiculo.vue";
 import filterVeiculos from "~/components/filterVeiculos.vue";
 
 export default {
@@ -118,7 +118,7 @@ export default {
   components: {
     theHeader,
     dropdownVeiculos,
-    modalCadastro,
+    modalCadastroVeiculo,
     filterVeiculos,
   },
   name: "veiculos",
@@ -139,7 +139,7 @@ export default {
         { text: "Zero-quilômetro?", value: "veiculo_zero" },
         { text: "Nível de conforto", value: "conforto" },
         { text: "Local de repouso (lat,long)", value: "localizacao" },
-        { text: "" },
+        { text: "", sortable: false },
       ],
       filtroPlaca: "",
       filtroProp: "",
@@ -243,11 +243,6 @@ export default {
   display: flex;
   align-items: center;
   padding: 0 12px;
-}
-
-.row {
-  height: 80px;
-  margin-bottom: 5px;
 }
 
 .btn-cadastro-veiculo {

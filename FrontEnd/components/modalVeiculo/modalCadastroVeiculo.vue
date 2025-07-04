@@ -1,15 +1,12 @@
 <template>
   <div>
-    <v-dialog max-width="700" v-model="dialogEditarVeiculo" persistent>
+    <v-dialog max-width="700" v-model="dialogCadastrarVeiculo" persistent>
       <v-card light>
         <div class="d-flex justify-space-between">
           <v-toolbar color="primary" class="white--color">
-            <div class="header">
-              <v-card-text class="white--text">Editar Veículo</v-card-text>
-              <span>{{ veiculo.placa }}</span>
-            </div>
+            <v-card-text class="white--text">Cadastro de Veículo</v-card-text>
             <v-btn text icon @click="$emit('fechaModal')">
-              <img src="../../assets/img/xmark.png" alt="clone" />
+              <img src="../../assets/img/xmark.png" alt="close" />
             </v-btn>
           </v-toolbar>
         </div>
@@ -25,13 +22,13 @@
               <v-text-field
                 type="text"
                 label="Placa"
-                v-model="placa"
-                hint="Ex: ABC-1234 ou ABC1C34"
+                v-model="dadosVeiculo.placa"
                 placeholder="Digite a placa do veículo"
                 persistent-placeholder
                 outlined
                 dense
-                disabled
+                required
+                :rules="placaRules"
               >
               </v-text-field>
             </v-col>
@@ -39,7 +36,7 @@
               <v-select
                 :items="marcas"
                 label="Marca"
-                v-model="marca"
+                v-model="dadosVeiculo.marca"
                 placeholder="Selecione a marca do veículo"
                 persistent-placeholder
                 outlined
@@ -57,7 +54,7 @@
               <v-text-field
                 type="text"
                 label="Modelo"
-                v-model="modelo"
+                v-model="dadosVeiculo.modelo"
                 placeholder="Digite o modelo do veículo"
                 persistent-placeholder
                 outlined
@@ -73,7 +70,7 @@
                 label="Ano"
                 placeholder="Selecione o ano do veículo"
                 persistent-placeholder
-                v-model="ano"
+                v-model="dadosVeiculo.ano"
                 dense
                 outlined
                 item-value="year"
@@ -87,10 +84,11 @@
                   <div
                     class="d-flex justify-start align-center pl-4 header-year"
                   >
-                    {{ ano || "Selecione o ano do veículo" }}
+                    {{ dadosVeiculo.ano || "Selecione o ano do veículo" }}
                   </div>
-                  <v-divider></v-divider> </template
-              ></v-select>
+                  <v-divider></v-divider>
+                </template>
+              </v-select>
             </v-col>
           </v-row>
           <v-row class="row-form">
@@ -98,7 +96,7 @@
               <v-text-field
                 type="text"
                 label="Cor"
-                v-model="cor"
+                v-model="dadosVeiculo.cor"
                 placeholder="Digite a cor do veículo"
                 persistent-placeholder
                 outlined
@@ -112,7 +110,7 @@
               <v-select
                 :items="proUso"
                 label="Propósito"
-                v-model="proposito_uso"
+                v-model="dadosVeiculo.proposito_uso"
                 placeholder="Selecione o propósito de uso"
                 persistent-placeholder
                 outlined
@@ -131,7 +129,7 @@
               <v-text-field
                 type="text"
                 label="Latitude"
-                v-model="latitude"
+                v-model="dadosVeiculo.latitude"
                 placeholder="Digite a latitude"
                 persistent-placeholder
                 outlined
@@ -145,7 +143,7 @@
               <v-text-field
                 type="text"
                 label="Longitude"
-                v-model="longitude"
+                v-model="dadosVeiculo.longitude"
                 placeholder="Digite a longitude"
                 persistent-placeholder
                 outlined
@@ -163,7 +161,7 @@
                   >Nivel de conforto do veículo</v-card-subtitle
                 >
                 <v-rating
-                  v-model="conforto"
+                  v-model="dadosVeiculo.conforto"
                   background-color="primary"
                   color="primary"
                   size="32"
@@ -173,7 +171,7 @@
           </v-row>
           <v-container fluid class="checkbox">
             <v-checkbox
-              v-model="veiculo_zero"
+              v-model="dadosVeiculo.veiculo_zero"
               label="Veículo zero-quilômetro"
               color="primary"
               ripple
@@ -185,7 +183,7 @@
               color="primary"
               :loading="loading"
               :disabled="loading"
-              @click="editarVeiculo(veiculo.id)"
+              @click="criarVeiculo"
               >Salvar</v-btn
             >
           </v-card-actions>
@@ -197,6 +195,7 @@
 
 <script>
 import {
+  placaRules,
   marcaRules,
   modeloRules,
   anoRules,
@@ -207,10 +206,23 @@ import {
 } from "../../services/validationsRules";
 
 export default {
-  props: ["veiculo"],
   data() {
     return {
-      dialogEditarVeiculo: true,
+      dialogCadastrarVeiculo: true,
+      years: [],
+      dadosVeiculo: {
+        placa: null,
+        marca: null,
+        modelo: null,
+        cor: null,
+        ano: null,
+        proposito_uso: null,
+        latitude: null,
+        longitude: null,
+        conforto: 1,
+        veiculo_zero: false,
+        dtCadastro: null,
+      },
       marcas: [
         "Bmw",
         "Chevrolet",
@@ -223,21 +235,9 @@ export default {
         "Toyota",
       ],
       proUso: ["Uso pessoal", "Veículo para locação", "Uso da empresa"],
-      placa: null,
-      marca: null,
-      modelo: null,
-      cor: null,
-      ano: null,
-      proposito_uso: null,
-      latitude: null,
-      longitude: null,
-      conforto: null,
-      veiculo_zero: null,
-      dtCadastro: null,
-      dtEdicao: null,
       loading: false,
-      years: [],
       valid: true,
+      placaRules,
       marcaRules,
       modeloRules,
       anoRules,
@@ -250,17 +250,6 @@ export default {
 
   created() {
     this.populateYears();
-    this.placa = this.veiculo.placa;
-    this.marca = this.veiculo.marca;
-    this.modelo = this.veiculo.modelo;
-    this.cor = this.veiculo.cor;
-    this.ano = this.veiculo.ano;
-    this.proposito_uso = this.veiculo.proposito_uso;
-    this.latitude = this.veiculo.latitude;
-    this.longitude = this.veiculo.longitude;
-    this.conforto = this.veiculo.conforto;
-    this.veiculo_zero = this.veiculo.veiculo_zero;
-    this.dtCadastro = this.veiculo.dtCadastro;
   },
 
   methods: {
@@ -277,22 +266,23 @@ export default {
       return item.year === this.currentYear ? "current-year" : "";
     },
 
-    async editarVeiculo(id) {
+    async criarVeiculo(e) {
+      e.preventDefault();
+
       this.loading = true;
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       try {
         if (
-          !this.placa ||
-          !this.marca ||
-          !this.modelo ||
-          !this.cor ||
-          !this.ano ||
-          !this.proposito_uso ||
-          !this.latitude ||
-          !this.longitude ||
-          !this.conforto
+          !this.dadosVeiculo.placa ||
+          !this.dadosVeiculo.marca ||
+          !this.dadosVeiculo.modelo ||
+          !this.dadosVeiculo.cor ||
+          !this.dadosVeiculo.ano ||
+          !this.dadosVeiculo.proposito_uso ||
+          !this.dadosVeiculo.latitude ||
+          !this.dadosVeiculo.longitude
         ) {
           this.$toast.error("Campos não preenchidos!");
           this.validate();
@@ -300,47 +290,40 @@ export default {
         }
 
         const data = {
-          placa: this.placa,
-          marca: this.marca,
-          modelo: this.modelo,
-          cor: this.cor,
-          ano: this.ano,
-          proposito_uso: this.proposito_uso,
-          latitude: this.latitude,
-          longitude: this.longitude,
-          conforto: this.conforto,
-          veiculo_zero: this.veiculo_zero,
-          dtCadastro: this.dtCadastro,
-          dtEdicao: new Date().toISOString(),
+          placa: this.dadosVeiculo.placa,
+          marca: this.dadosVeiculo.marca,
+          modelo: this.dadosVeiculo.modelo,
+          cor: this.dadosVeiculo.cor,
+          ano: this.dadosVeiculo.ano,
+          proposito_uso: this.dadosVeiculo.proposito_uso,
+          latitude: this.dadosVeiculo.latitude,
+          longitude: this.dadosVeiculo.longitude,
+          conforto: this.dadosVeiculo.conforto,
+          veiculo_zero: this.dadosVeiculo.veiculo_zero,
+          dtCadastro: new Date().toISOString(),
+          dtEdicao: null,
           dtExclusao: null,
-          ativo: true,
+          ativo: "1",
         };
 
-        const response = await this.$veiculoService.putVeiculo(id, data);
+        const response = await this.$veiculoService.postVeiculo(data);
 
-        if (response.status === 200 || response.status === 201) {
-          this.$toast.success("Veículo editado com sucesso");
+        if (response.status === 201 || response.status === 200) {
+          this.$toast.success("Veículo cadastrado com sucesso!");
 
           await new Promise((resolve) => setTimeout(resolve, 2000));
 
           this.$emit("fechaModal");
+          this.$emit("veiculoCadastrado");
         } else {
-          throw new Error("Erro ao editar veículo.");
+          throw new Error("Erro ao cadastrar o veículo.");
         }
       } catch (error) {
-        console.error("Erro ao editar veículo: ", error);
-        this.$toast.error("Erro ao editar veículo!");
+        console.error("Erro ao criar veículo: ", error);
+        this.$toast.error("Erro ao cadastrar veículo!");
       } finally {
         this.loading = false;
       }
-    },
-
-    onErrorClosed() {
-      console.log("Snackbar de erro fechado.");
-    },
-
-    onSuccessClosed() {
-      console.log("Sucesso");
     },
 
     validate() {
@@ -369,17 +352,6 @@ export default {
   padding: 4px 25px !important;
   display: flex;
   justify-content: space-between;
-}
-
-.header > span {
-  font-size: 16px !important;
-  font-weight: normal;
-  color: #fff !important;
-}
-
-.header {
-  display: flex;
-  flex-direction: column;
 }
 
 .modal-cadastro {
@@ -422,8 +394,15 @@ export default {
   font-weight: 400;
 }
 
+::v-deep .v-list-item__title,
+.v-list-item__subtitle {
+  font-size: 14px !important;
+  font-weight: 400;
+  color: #333333;
+}
+
 .v-list {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .header-year {
@@ -460,17 +439,21 @@ export default {
   height: 0 !important;
 }
 
+::v-deep .v-input--selection-controls .v-input__slot > .v-label,
+.v-input--selection-controls .v-radio > .v-label {
+  font-size: 14px !important;
+  font-weight: 400;
+  font-family: "Roboto";
+}
+
 .checkbox {
   padding: 0 0 0 2px;
   margin-top: -14px;
   height: 40px;
 }
 
-::v-deep .v-input--selection-controls .v-input__slot > .v-label,
-.v-input--selection-controls .v-radio > .v-label {
-  font-size: 14px !important;
-  font-weight: 400;
-  font-family: "Roboto";
+::v-depp .theme--light .v-label {
+  padding-top: 10px;
 }
 
 ::v-deep .v-messages__message {

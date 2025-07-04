@@ -33,7 +33,7 @@ class usuarioModel {
   }
 
   getUsuarios() {
-    const sql = "SELECT * FROM usuarios";
+    const sql = "SELECT * FROM bd_rota_locadora.usuarios ORDER BY nome_user ASC";
     return consulta(sql, "Não foi possível encontrar os usuários!");
   }
 }
