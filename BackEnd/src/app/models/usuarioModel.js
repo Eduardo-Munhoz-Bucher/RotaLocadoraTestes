@@ -32,9 +32,23 @@ class usuarioModel {
     return rows[0];
   }
 
-  getUsuarios() {
-    const sql = "SELECT * FROM bd_rota_locadora.usuarios ORDER BY nome_user ASC";
-    return consulta(sql, "Não foi possível encontrar os usuários!");
+  getUsuarios(nome_user = "") {
+    let sql = "SELECT * FROM usuarios WHERE ativo=1";
+    const params = [];
+
+    if (nome_user) {
+      sql += " AND nome_user LIKE ?";
+      params.push(`%${nome_user}%`); // Usa LIKE para busca parcial
+    }
+
+    sql += " ORDER BY nome_user ASC";
+
+    return consulta(sql, params, "Não foi possível encontrar os usuários!");
+  }
+
+  updateUsuario(usuario, id) {
+    const sql = "UPDATE usuarios SET ? WHERE id=?";
+    return consulta(sql, [usuario, id], "Não foi possivel editar o usuário!");
   }
 }
 
