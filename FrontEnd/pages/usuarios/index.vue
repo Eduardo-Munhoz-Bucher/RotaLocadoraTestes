@@ -15,6 +15,11 @@
           @fechaModal="modalCadastroUsuario = false"
           @usuarioCadastrado="atualizarUsuarios"
         />
+
+        <filterUsuarios
+          @aplicar-filtros="aplicarFiltros"
+          @limpar-filtros="limparFiltros"
+        />
       </v-container>
 
       <v-card v-if="loading" class="tabela-usuarios">
@@ -57,12 +62,8 @@
                         </v-btn>
                       </template>
                       <v-list color="#FFF">
-                        <v-list-item
-                          link
-                        >
-                          <v-list-item-title>
-                            Deletar
-                          </v-list-item-title>
+                        <v-list-item link @click="deletarUsuario(usuario.id)">
+                          <v-list-item-title> Desativar </v-list-item-title>
                         </v-list-item>
                       </v-list>
                     </v-menu>
@@ -95,6 +96,7 @@
 <script>
 import theHeader from "~/components/theHeader.vue";
 import modalCadastroUsuario from "~/components/modalUsuario/modalCadastroUsuario.vue";
+import filterUsuarios from "~/components/filterUsuarios.vue";
 import dropdownVeiculos from "~/components/dropdownVeiculos.vue";
 
 export default {
@@ -102,6 +104,7 @@ export default {
   comments: {
     theHeader,
     modalCadastroUsuario,
+    filterUsuarios,
     dropdownVeiculos,
   },
   name: "usuarios",
@@ -119,6 +122,7 @@ export default {
         { text: "Data de Nascimento", value: "data de nascimento" },
         { text: "", sortable: false },
       ],
+      filtroUsuario: "",
     };
   },
 
@@ -166,6 +170,61 @@ export default {
       const date = new Date(dateString);
       const dtFormatada = date.toLocaleDateString();
       return `${dtFormatada}`;
+    },
+
+    limparFiltros() {
+      this.filtroUsuario = "";
+      this.atualizarUsuarios();
+    },
+
+    aplicarFiltros(filtros) {
+      this.filtroUsuario = filtros.nome_user || "";
+      this.filtrarUsuarios();
+    },
+
+    async filtrarUsuarios() {
+      try {
+        this.loading = true;
+        const params = {};
+
+        if (this.filtroUsuario.trim())
+          params.nome_user = this.filtroUsuario.trim();
+
+        const response = await this.$axios.get("usuarios", { params });
+
+        this.usuarios = response.data;
+        this.pagAtual = 1;
+      } catch (error) {
+        this.$toast.error("Erro ao filtrar usuários");
+        console.error("Erro ao filtrar usuário(s): ", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async deletarUsuario(id) {
+      this.loading = true;
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      try {
+        const response = await this.$usuarioService.deleteUsuario(id);
+
+        if (response.status === 200 || response.status === 204) {
+          this.$toast.success("Usuário desativado com sucesso!");
+
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          this.getUsuarios();
+        } else {
+          throw new Error("Erro ao desativar o usuário.");
+        }
+      } catch (error) {
+        console.error("Erro ao desativar o usuário:", error);
+        this.$toast.error("Erro ao desativar o usuário!");
+      } finally {
+        this.loading = false;
+      }
     },
   },
 

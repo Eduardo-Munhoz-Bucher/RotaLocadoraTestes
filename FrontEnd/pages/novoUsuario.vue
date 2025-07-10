@@ -200,6 +200,7 @@ export default {
           dt_aniversario: this.formData.dt_aniversario,
           email: this.formData.email,
           senha: this.formData.senha,
+          ativo: "1",
         };
 
         const response = await this.$usuarioService.postUsuario(data);

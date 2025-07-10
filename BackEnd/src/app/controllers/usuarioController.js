@@ -2,9 +2,15 @@ import usuarioModel from "../models/usuarioModel.js";
 
 class usuarioController {
   async indexUsuarios(req, res) {
-    const row = await usuarioModel.getUsuarios();
+  try {
+    const { nome_user } = req.query; // Extrai nome_user da query string
+    const row = await usuarioModel.getUsuarios(nome_user);
     res.status(200).json(row);
+  } catch (error) {
+    console.error('Erro ao buscar usuários:', error);
+    res.status(500).json({ error: 'Erro ao buscar usuários' });
   }
+}
 
   async storyUsuario(req, res) {
     const usuario = req.body;
@@ -40,6 +46,30 @@ class usuarioController {
       },
     });
   }
+
+  async deleteUsuario(req, res) {
+      const id = req.params.id;
+  
+      const usuario = {
+        ativo: false,
+      };
+  
+      try {
+        const row = await usuarioModel.updateUsuario(usuario, id);
+        console.log("Usuário desativado com sucesso: ", row);
+  
+        res.status(200).json({
+          message: "Usuário desativado com sucesso!",
+          data: row,
+        });
+      } catch (error) {
+        console.error("Erro ao desativar Usuário: ", error);
+        res.status(500).json({
+          message: "Erro ao desativar Usuário.",
+          error: error.message,
+        });
+      }
+    }
 }
 
 export default new usuarioController();
