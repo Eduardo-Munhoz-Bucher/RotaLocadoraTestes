@@ -13,6 +13,11 @@ export class UsuarioService {
     return response;
   }
 
+  async putUsuario(id, data) {
+    const response = await this.httpClient.put(`/usuarios/${id}`, data);
+    return response;
+  }
+
   async deleteUsuario(id) {
     const response = await this.httpClient.delete(`usuarios/${id}`);
     return response;

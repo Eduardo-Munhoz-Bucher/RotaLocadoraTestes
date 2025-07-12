@@ -54,19 +54,12 @@
                 <td>{{ usuario.email }}</td>
                 <td>{{ formatData(usuario.dt_aniversario) }}</td>
                 <td>
-                  <v-list-item-action class="icone-dropdown">
-                    <v-menu offset-y left>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn plain icon v-bind="attrs" v-on="on">
-                          <v-icon dense>mdi-dots-horizontal</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list color="#FFF">
-                        <v-list-item link @click="deletarUsuario(usuario.id)">
-                          <v-list-item-title> Desativar </v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
+                  <v-list-item-action class="d-flex justify-end mr-0">
+                    <DropdownUsuarios 
+                      :usuario="usuario"
+                      :id="usuario.id"
+                      :atualizarUsuarios="getUsuarios"
+                    />
                   </v-list-item-action>
                 </td>
               </tr>
@@ -97,7 +90,7 @@
 import theHeader from "~/components/theHeader.vue";
 import modalCadastroUsuario from "~/components/modalUsuario/modalCadastroUsuario.vue";
 import filterUsuarios from "~/components/filterUsuarios.vue";
-import dropdownVeiculos from "~/components/dropdownVeiculos.vue";
+import dropdownUsuarios from "~/components/dropdownUsuarios.vue";
 
 export default {
   middleware: "auth",
@@ -105,13 +98,15 @@ export default {
     theHeader,
     modalCadastroUsuario,
     filterUsuarios,
-    dropdownVeiculos,
+    dropdownUsuarios,
   },
   name: "usuarios",
   data() {
     return {
       modalCadastroUsuario: false,
       dialogCadastrarUsuario: false,
+      modalRedefinirSenha: false,
+      dialogRedefinirSenha: false,
       pagAtual: 1,
       usuarioPorPag: 9,
       loading: true,
@@ -131,6 +126,7 @@ export default {
       const start = (this.pagAtual - 1) * this.usuarioPorPag;
       return this.usuarios.slice(start, start + this.usuarioPorPag);
     },
+
     pagTotal() {
       return Math.ceil(this.usuarios.length / this.usuarioPorPag);
     },
@@ -201,31 +197,6 @@ export default {
         this.loading = false;
       }
     },
-
-    async deletarUsuario(id) {
-      this.loading = true;
-
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      try {
-        const response = await this.$usuarioService.deleteUsuario(id);
-
-        if (response.status === 200 || response.status === 204) {
-          this.$toast.success("Usuário desativado com sucesso!");
-
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-
-          this.getUsuarios();
-        } else {
-          throw new Error("Erro ao desativar o usuário.");
-        }
-      } catch (error) {
-        console.error("Erro ao desativar o usuário:", error);
-        this.$toast.error("Erro ao desativar o usuário!");
-      } finally {
-        this.loading = false;
-      }
-    },
   },
 
   mounted() {
@@ -290,12 +261,6 @@ td {
   font-family: "Roboto";
   font-weight: 400;
   border-bottom: 1px solid #dfdfdf;
-}
-
-.icone-dropdown {
-  display: flex;
-  justify-content: end;
-  margin-right: 0px !important;
 }
 
 .v-list-item:hover {

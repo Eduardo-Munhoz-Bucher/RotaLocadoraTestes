@@ -76,7 +76,7 @@
                 </td>
                 <td>{{ veiculo.latitude }}, {{ veiculo.longitude }}</td>
                 <td>
-                  <v-list-item-action class="icone-dropdown">
+                  <v-list-item-action class="d-flex justify-end mr-0">
                     <DropdownVeiculos
                       :veiculo="veiculo"
                       :id="veiculo.id"
@@ -309,11 +309,6 @@ td {
 
 ::v-deep .v-list-item__action {
   margin: 0 !important;
-}
-
-.icone-dropdown {
-  display: flex;
-  justify-content: end;
 }
 
 ::v-deep .v-btn--icon.v-size--default .v-icon,
