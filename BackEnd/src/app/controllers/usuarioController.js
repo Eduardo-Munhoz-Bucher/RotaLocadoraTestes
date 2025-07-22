@@ -12,6 +12,17 @@ class usuarioController {
     }
   }
 
+  async indexUsuariosInativos(req, res) {
+    try {
+      const { nome_user } = req.query; // Extrai nome_user da query string
+      const row = await usuarioModel.getUsuariosInativos(nome_user);
+      res.status(200).json(row);
+    } catch (error) {
+      console.error("Erro ao buscar usuários:", error);
+      res.status(500).json({ error: "Erro ao buscar usuários" });
+    }
+  }
+
   async storyUsuario(req, res) {
     const usuario = req.body;
     const novoUsuario = await usuarioModel.createUsuario(usuario);

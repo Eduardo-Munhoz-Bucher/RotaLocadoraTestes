@@ -19,21 +19,18 @@
                 </v-btn>
               </template>
               <v-list color="#FFF">
-                <v-list-item
-                  link
-                  to="/usuarios/usuarios_desativados"
-                >
-                  <v-list-item-title>
-                    Usuários desativados
-                  </v-list-item-title>
+                <v-list-item link to="/usuarios">
+                  <v-list-item-title> Usuários ativos </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
           </v-list-item-action>
         </v-btn>
         <v-icon x-large class="ml-5">mdi-chevron-right</v-icon>
-        <v-subheader class="text-h5 font-weight-thin px-0 ml-4 mr-5">Usuários Ativos</v-subheader>
-        <modalCadastroUsuario
+        <v-subheader class="text-h5 font-weight-thin px-0 ml-4"
+          >Usuários Desativados</v-subheader
+        >
+        <ModalCadastroUsuario
           v-if="modalCadastroUsuario"
           @fechaModal="modalCadastroUsuario = false"
           @usuarioCadastrado="atualizarUsuarios"
@@ -76,21 +73,12 @@
                 <td>{{ usuario.nome_user }}</td>
                 <td>{{ usuario.email }}</td>
                 <td>{{ formatData(usuario.dt_aniversario) }}</td>
-                <td>
-                  <v-list-item-action class="d-flex justify-end mr-0">
-                    <dropdownUsuarios
-                      :usuario="usuario"
-                      :id="usuario.id"
-                      :atualizarUsuarios="getUsuarios"
-                    />
-                  </v-list-item-action>
-                </td>
               </tr>
             </tbody>
           </template>
         </v-data-table>
 
-        <div v-if="usuarios.length === 0" class="semUsuario">
+        <div v-if="usuarios_inativos.length === 0" class="semUsuario">
           <p class="mb-0">Nenhum usuário encontrado</p>
         </div>
       </v-card>
@@ -100,7 +88,7 @@
           <v-pagination
             v-model="pagAtual"
             :length="pagTotal"
-            @input="getUsuarios"
+            @input="getUsuariosInativos"
             color="#3366CC"
           ></v-pagination>
         </div>
@@ -117,7 +105,7 @@ import dropdownUsuarios from "~/components/usuarios/dropdownUsuarios.vue";
 
 export default {
   middleware: "auth",
-  components: {
+  comments: {
     theHeader,
     modalCadastroUsuario,
     filterUsuarios,
@@ -133,12 +121,11 @@ export default {
       pagAtual: 1,
       usuarioPorPag: 9,
       loading: true,
-      usuarios: [],
+      usuarios_inativos: [],
       headers: [
         { text: "Nome", value: "nome" },
         { text: "Email", value: "email" },
         { text: "Data de Nascimento", value: "data de nascimento" },
-        { text: "", sortable: false },
       ],
       filtroUsuario: "",
     };
@@ -147,11 +134,11 @@ export default {
   computed: {
     paginatedUsuario() {
       const start = (this.pagAtual - 1) * this.usuarioPorPag;
-      return this.usuarios.slice(start, start + this.usuarioPorPag);
+      return this.usuarios_inativos.slice(start, start + this.usuarioPorPag);
     },
 
     pagTotal() {
-      return Math.ceil(this.usuarios.length / this.usuarioPorPag);
+      return Math.ceil(this.usuarios_inativos.length / this.usuarioPorPag);
     },
   },
 
@@ -169,10 +156,10 @@ export default {
       }
     },
 
-    async getUsuarios() {
+    async getUsuariosInativos() {
       try {
-        const response = await this.$usuarioService.getUsuarios();
-        this.usuarios = response;
+        const response = await this.$usuarioService.getUsuariosInativos();
+        this.usuarios_inativos = response;
       } catch (error) {
         console.error("Erro ao buscar usuários cadastrados: ", error);
       } finally {
@@ -182,7 +169,7 @@ export default {
 
     async atualizarUsuarios() {
       this.loading = true;
-      await this.getUsuarios();
+      await this.getUsuariosInativos();
     },
 
     formatData(dateString) {
@@ -209,9 +196,9 @@ export default {
         if (this.filtroUsuario.trim())
           params.nome_user = this.filtroUsuario.trim();
 
-        const response = await this.$axios.get("usuarios", { params });
+        const response = await this.$axios.get("usuarios_inativos", { params });
 
-        this.usuarios = response.data;
+        this.usuarios_inativos = response.data;
         this.pagAtual = 1;
       } catch (error) {
         this.$toast.error("Erro ao filtrar usuários");
@@ -223,7 +210,7 @@ export default {
   },
 
   mounted() {
-    this.getUsuarios();
+    this.getUsuariosInativos();
 
     this.ajustarItensPorPagina();
 
@@ -294,6 +281,10 @@ td {
 
 .v-list-item:hover {
   background: #dfdfdf;
+}
+
+.v-list .v-list-item--active {
+  color: #fff;
 }
 
 .v-list {

@@ -19,31 +19,47 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <ModalRedefinirSenha 
+    <modalDetalhes
       v-if="detalhes[0].modal"
-      @fechaModal="handleFechaModalRedefinirSenha"
-      :usuario="usuario"
+      @fechaModal="handleFechaModalDetalhes"
+      :veiculo="veiculo"
+    />
+    <modalEditar
+      v-if="detalhes[1].modal"
+      @fechaModal="handleFechaModalEdicao"
+      :veiculo="veiculo"
+      :id="veiculo.id"
+    />
+    <modalDeletar
+      v-if="detalhes[2].modal"
+      @fechaModal="handleFechaModalDeletar"
+      :veiculo="veiculo"
+      :id="veiculo.id"
     />
   </div>
 </template>
 
 <script>
-import modalRedefinirSenha from './modalUsuario/modalRedefinirSenha.vue';
+import modalEditar from "./modalVeiculo/modalEditar.vue";
+import modalDeletar from "./modalVeiculo/modalDeletar.vue";
+import modalDetalhes from "./modalVeiculo/modalDetalhes.vue";
 
 export default {
-  props: ["usuario", "id", "atualizarUsuarios"],
-  components: {
-    modalRedefinirSenha
-  },
+  props: ["veiculo", "id", "atualizarVeiculos"],
+  components: { modalEditar, modalDetalhes, modalDeletar },
   data() {
     return {
       detalhes: [
         {
-          title: "Redefinir senha",
+          title: "Detalhes",
           modal: false,
         },
         {
-          title: "Desativar",
+          title: "Editar",
+          modal: false,
+        },
+        {
+          title: "Deletar",
           modal: false,
         },
       ],
@@ -54,34 +70,18 @@ export default {
       this.detalhes[index].modal = true;
     },
 
-    handleFechaModalRedefinirSenha() {
+    handleFechaModalDetalhes() {
       this.detalhes[0].modal = false;
-      this.atualizarUsuarios();
     },
 
-    async deletarUsuario(id) {
-      this.loading = true;
+    handleFechaModalEdicao() {
+      this.detalhes[1].modal = false;
+      this.atualizarVeiculos();
+    },
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      try {
-        const response = await this.$usuarioService.deleteUsuario(id);
-
-        if (response.status === 200 || response.status === 204) {
-          this.$toast.success("Usuário desativado com sucesso!");
-
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-
-          this.getUsuarios();
-        } else {
-          throw new Error("Erro ao desativar o usuário.");
-        }
-      } catch (error) {
-        console.error("Erro ao desativar o usuário:", error);
-        this.$toast.error("Erro ao desativar o usuário!");
-      } finally {
-        this.loading = false;
-      }
+    handleFechaModalDeletar() {
+      this.detalhes[2].modal = false;
+      this.atualizarVeiculos(); 
     },
   },
 };

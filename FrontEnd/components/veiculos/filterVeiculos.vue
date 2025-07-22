@@ -3,7 +3,7 @@
     <v-col cols="12" class="alinhamento-filtros">
       <v-btn icon large @click="visibilidadeFiltro" class="btn-toClose">
         <img
-          src="../assets/img/bars-filter.png"
+          src="../../assets/img/bars-filter.png"
           alt="icone-bars"
           width="26"
           height="24"
@@ -23,7 +23,7 @@
                 @click="filtrarVeiculos"
               >
                 <img
-                  src="../assets/img/magnifying-glass.png"
+                  src="../../assets/img/magnifying-glass.png"
                   alt="icone-lupa"
                 />
               </v-btn>
@@ -36,7 +36,7 @@
                 height="40"
                 @click="limparFiltro"
               >
-                <img src="../assets/img/erase.png" alt="icone-limpar" />
+                <img src="../../assets/img/erase.png" alt="icone-limpar" />
               </v-btn>
             </div>
           </v-col>

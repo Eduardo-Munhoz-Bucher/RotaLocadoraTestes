@@ -84,7 +84,7 @@
 
 <script>
 import theHeader from "../components/theHeader.vue";
-import filterVeiculos from "~/components/filterVeiculos.vue";
+import filterVeiculos from "~/components/veiculos/filterVeiculos.vue";
 
 export default {
   middleware: "auth",

@@ -17,6 +17,7 @@ router.delete("/veiculos/:id", veiculoController.deleteVeiculo);
 
 router.post("/login", usuarioController.loginUsuario);
 router.get("/usuarios", usuarioController.indexUsuarios);
+router.get("/usuarios_inativos", usuarioController.indexUsuariosInativos);
 router.post("/usuarios", usuarioController.storyUsuario);
 router.put("/usuarios/:id", usuarioController.updateUsuario)
 router.delete("/usuarios/:id", usuarioController.deleteUsuario);

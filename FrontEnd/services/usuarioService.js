@@ -8,6 +8,11 @@ export class UsuarioService {
     return response.data;
   }
 
+  async getUsuariosInativos() {
+    const response = await this.httpClient.get("/usuarios_inativos");
+    return response.data;
+  }
+
   async postUsuario(data) {
     const response = await this.httpClient.post("/usuarios", data);
     return response;

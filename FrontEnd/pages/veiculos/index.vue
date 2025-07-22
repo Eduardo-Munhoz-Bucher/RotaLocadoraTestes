@@ -11,7 +11,7 @@
         >
           Cadastrar Veículo
         </v-btn>
-        <ModalCadastroVeiculo
+        <modalCadastroVeiculo
           v-if="modal"
           @fechaModal="modal = false"
           @veiculoCadastrado="atualizarVeiculos"
@@ -67,7 +67,7 @@
                 <td class="conforto">
                   {{ veiculo.conforto }}
                   <img
-                    src="../../assets/img/star-solid.png"
+                    src="~/assets/img/star-solid.png"
                     alt="star-solid"
                     width="20"
                     height="19"
@@ -77,7 +77,7 @@
                 <td>{{ veiculo.latitude }}, {{ veiculo.longitude }}</td>
                 <td>
                   <v-list-item-action class="d-flex justify-end mr-0">
-                    <DropdownVeiculos
+                    <dropdownVeiculos
                       :veiculo="veiculo"
                       :id="veiculo.id"
                       :atualizarVeiculos="getVeiculos"
@@ -108,10 +108,10 @@
 </template>
 
 <script>
-import dropdownVeiculos from "../../components/dropdownVeiculos.vue";
-import theHeader from "../../components/theHeader.vue";
-import modalCadastroVeiculo from "../../components/modalVeiculo/modalCadastroVeiculo.vue";
-import filterVeiculos from "~/components/filterVeiculos.vue";
+import dropdownVeiculos from "~/components/veiculos/dropdownVeiculos.vue";
+import theHeader from "~/components/theHeader.vue";
+import modalCadastroVeiculo from "~/components/veiculos/modalVeiculo/modalCadastroVeiculo.vue";
+import filterVeiculos from "~/components/veiculos/filterVeiculos.vue";
 
 export default {
   middleware: "auth",

@@ -46,6 +46,20 @@ class usuarioModel {
     return consulta(sql, params, "Não foi possível encontrar os usuários!");
   }
 
+  getUsuariosInativos(nome_user = "") {
+    let sql = "SELECT * FROM usuarios WHERE ativo=0";
+    const params = [];
+
+    if (nome_user) {
+      sql += " AND nome_user LIKE ?";
+      params.push(`%${nome_user}%`); // Usa LIKE para busca parcial
+    }
+
+    sql += " ORDER BY nome_user ASC";
+
+    return consulta(sql, params, "Não foi possível encontrar os usuários!");
+  }
+
   updateUsuario(usuario, id) {
     const sql = "UPDATE usuarios SET ? WHERE id=?";
     return consulta(sql, [usuario, id], "Não foi possivel editar o usuário!");

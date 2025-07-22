@@ -19,47 +19,41 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <ModalDetalhes
+    <modalRedefinirSenha 
       v-if="detalhes[0].modal"
-      @fechaModal="handleFechaModalDetalhes"
-      :veiculo="veiculo"
+      @fechaModal="handleFechaModalRedefinirSenha"
+      :usuario="usuario"
     />
-    <ModalEditar
+
+    <modalDesativarUsuario 
       v-if="detalhes[1].modal"
-      @fechaModal="handleFechaModalEdicao"
-      :veiculo="veiculo"
-      :id="veiculo.id"
-    />
-    <ModalDeletar
-      v-if="detalhes[2].modal"
-      @fechaModal="handleFechaModalDeletar"
-      :veiculo="veiculo"
-      :id="veiculo.id"
+      @fechaModal="handleFechaModalDesativarUsuario"
+      :usuario="usuario"
+      :id="usuario.id"
     />
   </div>
 </template>
 
 <script>
-import modalEditar from "./modalVeiculo/modalEditar.vue";
-import modalDetalhes from "./modalVeiculo/modalDetalhes.vue";
-import modalDeletar from "./modalVeiculo/modalDeletar.vue";
+import modalRedefinirSenha from './modalUsuario/modalRedefinirSenha.vue';
+import modalDesativarUsuario from './modalUsuario/modalDesativarUsuario.vue';
 
 export default {
-  props: ["veiculo", "id", "atualizarVeiculos"],
-  components: { modalEditar, modalDetalhes, modalDeletar },
+  name: "dropdownUsuarios",
+  props: ["usuario", "id", "atualizarUsuarios"],
+  components: {
+    modalRedefinirSenha,
+    modalDesativarUsuario
+  },
   data() {
     return {
       detalhes: [
         {
-          title: "Detalhes",
+          title: "Redefinir senha",
           modal: false,
         },
         {
-          title: "Editar",
-          modal: false,
-        },
-        {
-          title: "Deletar",
+          title: "Desativar",
           modal: false,
         },
       ],
@@ -70,19 +64,15 @@ export default {
       this.detalhes[index].modal = true;
     },
 
-    handleFechaModalDetalhes() {
+    handleFechaModalRedefinirSenha() {
       this.detalhes[0].modal = false;
+      this.atualizarUsuarios();
     },
 
-    handleFechaModalEdicao() {
+    handleFechaModalDesativarUsuario() {
       this.detalhes[1].modal = false;
-      this.atualizarVeiculos();
-    },
-
-    handleFechaModalDeletar() {
-      this.detalhes[2].modal = false;
-      this.atualizarVeiculos(); 
-    },
+      this.atualizarUsuarios();
+    }
   },
 };
 </script>
