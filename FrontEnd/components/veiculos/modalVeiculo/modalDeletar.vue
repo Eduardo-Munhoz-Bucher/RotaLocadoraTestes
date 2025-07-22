@@ -5,7 +5,7 @@
         <v-card-title class="pb-4">
           <div class="title--info">
             <img
-              src="../../assets/img/trash-solid.svg"
+              src="~/assets/img/trash-solid.svg"
               alt="icon-ban"
               width="21"
               height="24"

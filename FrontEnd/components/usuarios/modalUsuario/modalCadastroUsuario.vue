@@ -8,7 +8,7 @@
               >Cadastro de Usuário</v-card-text
             >
             <v-btn text icon @click="$emit('fechaModal')">
-              <img src="../../assets/img/xmark.png" alt="close" />
+              <img src="~/assets/img/xmark.png" alt="close" />
             </v-btn>
           </v-toolbar>
         </div>
@@ -129,7 +129,7 @@ import {
   emailRules,
   senhaRules,
   confirmarSenhaRule,
-} from "../../services/validationsRules";
+} from "~/services/validationsRules";
 
 export default {
   data() {

@@ -9,7 +9,7 @@
               <span>{{ veiculo.placa }}</span>
             </div>
             <v-btn text icon @click="$emit('fechaModal')">
-              <img src="../../assets/img/xmark.png" alt="close" />
+              <img src="~/assets/img/xmark.png" alt="close" />
             </v-btn>
           </v-toolbar>
         </div>
@@ -23,7 +23,7 @@
                     <div class="div-avatar-veiculo mr-2 mt-1" >
                       <v-avatar size="36" color="red">
                         <img
-                          src="../../assets/img/Vector.png"
+                          src="~/assets/img/Vector.png"
                           alt="car-side"
                           class="v-icon"
                         />
@@ -79,7 +79,7 @@
                     <div class="subtitulo">
                       {{ veiculo.conforto }}
                       <img
-                        src="../../assets/img/star-solid.png"
+                        src="~/assets/img/star-solid.png"
                         alt="star-solid"
                         width="20"
                         height="19"

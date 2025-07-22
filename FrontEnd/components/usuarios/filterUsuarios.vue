@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" class="alinhamento-filtros">
+    <v-col cols="12" class="alinhamento-filtros ml-1">
       <div class="visibilidade">
         <v-col cols="1" class="buttons mr-6">
           <div>
@@ -13,7 +13,7 @@
               height="40"
               @click="filtrarUsuarios"
             >
-              <img src="../assets/img/magnifying-glass.png" alt="icone-lupa" />
+              <img src="../../assets/img/magnifying-glass.png" alt="icone-lupa" />
             </v-btn>
             <v-btn
               color="secondary"
@@ -24,7 +24,7 @@
               height="40"
               @click="limparFiltro"
             >
-              <img src="../assets/img/erase.png" alt="icone-limpar" />
+              <img src="../../assets/img/erase.png" alt="icone-limpar" />
             </v-btn>
           </div>
         </v-col>
@@ -49,6 +49,7 @@
 
 <script>
 export default {
+  name: "filterUsuarios",
   data() {
     return {
       filtroUsuario: "",
@@ -88,7 +89,7 @@ export default {
   display: flex;
   flex-direction: row-reverse;
   width: 100%;
-  margin-right: 38px;
+  margin-right: 69px;
   transition: 0.5ms;
 }
 
